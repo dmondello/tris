@@ -11,7 +11,7 @@ Than I used the provided sample game of Guess-a-Number.
 I decided to use a text for the board with 9 comma-seperated characters, where each character has to be a '-', 'X', or 'O'.
 So i can image the board positions are the same in json.
 - To realize a ranking, I calculate the win ratio.
-The formula for every user calculates the total of number of wins minus number of losses.
+The formula for every user calculates the total of number of wins minus number of losses divides for total games played.
 In models.py I create a class RankingForm for outbound Ranking information with user_name, rank and net_win_ratio.
 
 - The games don't give a visual information about the board but this is because i give this opportunity to who design the client.

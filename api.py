@@ -92,19 +92,20 @@ class TrisApi(remote.Service):
 
     @endpoints.method(request_message=GET_GAME_REQUEST,
                       response_message=StringMessage,
-                      path='game/{urlsafe_game_key}/cancel',
+                      path='game/{urlsafe_game_key}',
                       name='cancel_game',
-                      http_method='GET')
+                      http_method='DELETE')
     def cancel_game(self, request):
-        """Deletes the not finished game"""
+        """Deletes not finised game"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
-        if not game:
+        if game and not game.game_over:
+            game.key.delete()
+            return StringMessage(message='Game with key: {} deleted.'.
+                                 format(request.urlsafe_game_key))
+        elif game and game.game_over:
+            raise endpoints.BadRequestException('Game is over!')
+        else:
             raise endpoints.NotFoundException('Game not found!')
-        if game.game_over:
-            raise endpoints.ConflictException('Game is over!')
-        game.key.delete()
-        return StringMessage(message='Game {} deleted!'.format(
-                request.urlsafe_game_key))
 
     @endpoints.method(request_message=USER_REQUEST,
                       response_message=GameForms,
@@ -144,7 +145,7 @@ class TrisApi(remote.Service):
 
         previous_board_position = game.board_position.split(',')
         new_board_position = request.move.split(',')
-
+        game.history.append(new_board_position)
         validation = TrisApi._validate_board_position(new_board_position,
             previous_board_position)
         if validation.valid == False:
@@ -246,6 +247,19 @@ class TrisApi(remote.Service):
                 pass
         return win
 
+
+    @endpoints.method(request_message=GET_GAME_REQUEST,
+                      response_message=StringMessage,
+                      path='game/{urlsafe_game_key}/history',
+                      name='get_game_history',
+                      http_method='GET')
+    def get_game_history(self, request):
+        """Return a Game's move history"""
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        if not game:
+            raise endpoints.NotFoundException('Game not found')
+        return StringMessage(message=str(game.history))
+
     @endpoints.method(response_message=ScoreForms,
                   path='scores',
                   name='get_scores',
@@ -295,7 +309,7 @@ class TrisApi(remote.Service):
         # calculate the win_ratio
         user_to_ratio = {}
         for user in user_to_stats:
-            user_to_ratio[user] = (user_to_stats[user]['wins'] - user_to_stats[user]['losses'])
+            user_to_ratio[user] = (user_to_stats[user]['wins'] - user_to_stats[user]['losses']) / float(user_to_stats[score.user]['games'])
 
         # rank users by ratio
         ranked_users = sorted(user_to_ratio, key=user_to_ratio.get, reverse=True)

@@ -19,6 +19,7 @@ class User(ndb.Model):
         form.email = self.email
         return form
 
+
 class Game(ndb.Model):
     """Game object"""
     board_position = ndb.StringProperty(required=True, 
@@ -29,12 +30,14 @@ class Game(ndb.Model):
     user1 = ndb.KeyProperty(required=True, kind='User')
     user2 = ndb.KeyProperty(required=True, kind='User')
     moves = ndb.IntegerProperty(required=True, default=0)
+    history = ndb.PickleProperty(required=True)
 
     @classmethod
     def new_game(cls, user1, user2):
         """Creates and returns a new game"""
         game = Game(user1=user1,
                     user2=user2)
+        game.history = []
         game.put()
         return game
 

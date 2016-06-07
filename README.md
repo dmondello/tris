@@ -28,7 +28,7 @@ Each game can be retrieved or played by using the path parameter `urlsafe_game_k
  - utils.py: Helper function for retrieving ndb.Models by urlsafe Key string.
 
 ##Score Keeping:
-The score will be based on the highest net win to game ratio, which will be defined as (# of wins - # of losses) / (# of games).
+The score will be based on the highest net win to game ratio, which will be defined as (number of wins - number of losses) / (total of games).
 
 
 ##Endpoints Included:
@@ -66,7 +66,7 @@ The score will be based on the highest net win to game ratio, which will be defi
  - **make_move**
     - Path: 'game/{urlsafe_game_key}'
     - Method: PUT
-    - Parameters: urlsafe_game_key, board_position
+    - Parameters: urlsafe_game_key, board_position": "-,-,-,-,-,-,-,-,-" you have substituite "-" with "X" or "O" 
     - Returns: GameForm with new game state.
     - Description: Accepts numers to indicate the new board position from the top 
     left corner to the buttom right corner and returns the updated state of the game 
