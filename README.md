@@ -87,6 +87,13 @@ The score will be based on the highest net win to game ratio, which will be defi
     - Returns: ScoreForms.
     - Description: Returns all Scores in the database (unordered).
     
+ -  **get_game_history**
+
+    - **Path: 'game/{urlsafe_game_key}'
+    - Method: GET
+    - Parameters: urlsafe_game_key
+    - Returns: StringMessage containing history
+    - Description: Returns the move history of a game inside the board    
     
  - **get_active_game_count**
     - Path: 'games/average_moves_per_game'
