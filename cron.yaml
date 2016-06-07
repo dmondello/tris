@@ -1,0 +1,4 @@
+cron:
+- description: Send an email to users
+  url: /crons/send_reminder
+  schedule: every 12 hours

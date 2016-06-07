@@ -1,0 +1,17 @@
+Design Decisions
+I design two version of tris without the Apis to be secure that the "core of application" was ok.
+For both versions I use AI and not two player to be faster to test the game.
+The games are (they are in the folder "versions_no_api":
+  tris.py 
+  tris.py it's a classic game with UI that user can launch from terminal and play the game.
+  simplytris.py
+  simplytris.py it's the same game without UI
+
+Than I used the provided sample game of Guess-a-Number.
+I decided to use a text for the board with 9 comma-seperated characters, where each character has to be a '-', 'X', or 'O'.
+So i can image the board positions are the same in json.
+- To realize a ranking, I calculate the win ratio.
+The formula for every user calculates the total of number of wins minus number of losses.
+In models.py I create a class RankingForm for outbound Ranking information with user_name, rank and net_win_ratio.
+
+- The games don't give a visual information about the board but this is because i give this opportunity to who design the client.
